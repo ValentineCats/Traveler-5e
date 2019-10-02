@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 using Newtonsoft.Json;
 
 public class Dummy
@@ -9,9 +10,21 @@ public class Dummy
     public int x;
     public string stringythingy;
 }
+
+public class SkillTest
+{
+    public string name { get; set; }
+    public List<string> score { get; set; }
+    public List<string> subskills { get; set; }
+}
+
+public class RootObject
+{
+    public List<SkillTest> skillTest { get; set; }
+}
 public class TestButtonBhavior : MonoBehaviour
 {
-
+    public string path;
     public Button testButton;
     // Start is called before the first frame update
     void Start()
@@ -28,7 +41,18 @@ public class TestButtonBhavior : MonoBehaviour
         var tr = new System.IO.StringWriter();
         x.Serialize(tr, t);
         var m = x.ToString();
-        Debug.Log(m);
+        //Debug.Log(m);
+
+
+        path = "Assets/Resources/Skills.json";
+        //StreamReader skills = new StreamReader(path);
+        var json = File.ReadAllText(path);
+        var skillTest = JsonConvert.DeserializeObject<RootObject>(json);
+
+        Debug.Log(skillTest.skillTest[0].name);
+
+        //dynamic array = JsonConvert.DeserializeObject(json);
+        
        
     }
 

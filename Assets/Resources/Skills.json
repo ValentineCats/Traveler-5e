@@ -1,106 +1,132 @@
 {
-	"skills": {
-		"acrobatics": {
+	"skillTest": [{
+			"name": "acrobatics",
 			"score": ["dexterity"],
 			"subskills": ["jump", "balance", "stunt", "escape"]
 		},
-		"animal handling": {
+		{
+			"name": "animal handling",
 			"score": ["wisdom"],
 			"subskills": ["control", "train", "read emotions"]
 		},
-		"arcana": {
+		{
+			"name": "arcana",
 			"score": ["intelligence"],
 			"subskills": ["arcane", "aberrations", "planes", "dragons", "constructs", "magical beasts"]
 		},
-		"athletics": {
+		{
+			"name": "athletics",
 			"score": ["strength"],
 			"subskills": ["climb", "jump", "swim", "grapple", "lift"]
 		},
-		"deception": {
+		{
+			"name": "deception",
 			"score": ["charisma"],
 			"subskills": ["lies", "disguise", "forgery"]
 		},
-		"history": {
+		{
+			"name": "history",
 			"score": ["intelligence"],
 			"subskills": ["people", "events", "locations", "laws", "humanoids"]
 		},
-		"insight": {
+		{
+			"name": "insight",
 			"score": ["wisdom"],
 			"subskills": ["lies", "intentions", "emotions"]
 		},
-		"intimidation": {
+		{
+			"name": "intimidation",
 			"score": ["charisma", "strength"],
 			"subskills": ["scare", "inspire", "extort"]
 		},
-		"investigation": {
+		{
+			"name": "investigation",
 			"score": ["intelligence"],
 			"subskills": ["deduction", "hidden objects", "crime scenes", "forgery"]
 		},
-		"medicine": {
+		{
+			"name": "medicine",
 			"score": ["wisdom"],
 			"subskills": ["injuries", "diseases", "poison"]
 		},
-		"nature": {
+		{
+			"name": "nature",
 			"score": ["intelligence"],
 			"subskills": ["beasts", "weather", "fey", "plants", "monstrous"]
 		},
-		"perception": {
+		{
+			"name": "perception",
 			"score": ["wisdom"],
 			"subskills": ["see", "hear", "smell", "feel"]
 		},
-		"performance": {
+		{
+			"name": "performance",
 			"score": ["charisma"],
 			"subskills": ["act", "dance", "song", "hype"]
 		},
-		"persuasion": {
+		{
+			"name": "persuasion",
 			"score": ["charisma"],
 			"subskills": ["trade", "diplomacy", "befriend", "oration"]
 		},
-		"religion": {
+		{
+			"name": "religion",
 			"score": ["intelligence"],
 			"subskills": ["undead", "fiends", "celestials", "religions", "divine"]
 		},
-		"sleight of hand": {
+		{
+			"name": "sleight of hand",
 			"score": ["dexterity"],
 			"subskills": ["pickpocket", "conceal", "signaling"]
 		},
-		"stealth": {
+		{
+			"name": "stealth",
 			"score": ["dexterity"],
 			"subskills": ["hide", "move silently", "stow"]
 		},
-		"survival": {
+		{
+			"name": "survival",
 			"score": ["wisdom"],
 			"subskills": ["survival", "gather food", "pathfinder", "poisons", "natural hazards"]
 		},
-		"melee weapon skill": {
+		{
+			"name": "melee weapon skill",
 			"score": ["strength", "dexterity"],
 			"subskills": ["hammers/maces", "blades", "spears", "axes", "improvised", "exotic"]
 		},
-		"ranged weapon skill": {
+		{
+			"name": "ranged weapon skill",
 			"score": ["dexterity"],
 			"subskills": ["bows", "crossbows", "slings", "thrown"]
 		},
-		"spell skill": {
+		{
+			"name": "spell skill",
 			"score": ["intelligence", "wisdom", "charisma"],
 			"subskills": ["ranged", "melee", "saves"]
 		},
-		"saving throw: strength": {
+		{
+			"name": "saving throw: strength",
 			"score": ["strength"]
 		},
-		"saving throw: dexterity": {
-			"score": ["dexterity"]
-		},
-		"saving throw: constitution": {
+    {
+      "name": "saving throw: dexterity",
+      "score": [ "dexterity" ]
+    },
+		{
+			"name": "saving throw: constitution",
 			"score": ["constitution"]
 		},
-		"saving throw: intelligence": {
+		{
+			"name": "saving throw: intelligence",
 			"score": ["intelligence"]
 		},
-		"saving throw: wisdom": {
+		{
+			"name": "saving throw: wisdom",
 			"score": ["wisdom"]
 		},
-		"saving throw: charisma": {
+		{
+			"name": "saving throw: charisma",
 			"score": ["charisma"]
 		}
-	}
+	]
 }
