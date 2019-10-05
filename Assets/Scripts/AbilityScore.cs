@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityScore : MonoBehaviour
+public class AbilityShim
+{
+
+}
+
+public class AbilityScore 
 {
     public string scoreName;
     public int score;
@@ -11,9 +16,9 @@ public class AbilityScore : MonoBehaviour
     //testing
 
 
-    public void Initialize(string n)
+    public void Initialize(string name)
     {
-        this.scoreName = n;
+        this.scoreName = name;
         this.score = 10;
         this.bonus = 0;
         this.maximum = 20;

@@ -8,16 +8,24 @@ public class AbilityScores : MonoBehaviour
     //int[] scores;
     //int[] maximums;
     public List<AbilityScore> abilityScores;
-    public GameObject abilityScoreContainerObject;
+    //public GameObject abilityScoreContainerObject;
+
+    AbilityScores()
+    {
+        abilityScores = new List<AbilityScore>();
+    }
 
 
-    public void AddAbilityScore(string n)
+    public void AddAbilityScore(string name)
     {
         // this.gameObject.transform.GetChild(0).gameObject.AddComponent<AbilityScore>();
-        GameObject o = Instantiate(abilityScoreContainerObject, new Vector3(0,0,0), Quaternion.identity);
-        o.transform.parent = this.gameObject.transform;
-        o.GetComponent<AbilityScore>().Initialize(n);
-        abilityScores.Add(o.GetComponent<AbilityScore>());
+       // GameObject o = Instantiate(abilityScoreContainerObject, new Vector3(0,0,0), Quaternion.identity);
+        //o.transform.parent = this.gameObject.transform;
+
+        //o.GetComponent<AbilityShim>().Initialize(n);
+        AbilityScore abilityScore = new AbilityScore();
+        abilityScore.Initialize(name);
+        abilityScores.Add(abilityScore);
     }
 
     public int IncreaseScoreByName(string n, int sco)
