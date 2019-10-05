@@ -11,17 +11,7 @@ public class Dummy
     public string stringythingy;
 }
 
-public class SkillTest
-{
-    public string name { get; set; }
-    public List<string> score { get; set; }
-    public List<string> subskills { get; set; }
-}
 
-public class RootObject
-{
-    public List<SkillTest> skillTest { get; set; }
-}
 public class TestButtonBhavior : MonoBehaviour
 {
     public string path;
@@ -46,10 +36,10 @@ public class TestButtonBhavior : MonoBehaviour
 
         path = "Assets/Resources/Skills.json";
         //StreamReader skills = new StreamReader(path);
-        var json = File.ReadAllText(path);
-        var skillTest = JsonConvert.DeserializeObject<RootObject>(json);
+        //var json = File.ReadAllText(path);
+        //var skillTest = JsonConvert.DeserializeObject<RootObject>(json);
 
-        Debug.Log(skillTest.skillTest[0].name);
+        //Debug.Log(skillTest.skillTest[0].name);
 
         //dynamic array = JsonConvert.DeserializeObject(json);
         

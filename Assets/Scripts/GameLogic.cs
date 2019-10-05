@@ -2,47 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using Newtonsoft.Json;
+
+
+public class SkillJson
+{
+    public string name { get; set; }
+    public List<string> score { get; set; }
+    public List<string> subskills { get; set; }
+}
+
+public class SkillsJson
+{
+    public List<SkillJson> skillTest { get; set; }
+}
+
+public class AbilityScoresJson
+{
+    public List<string> abilityScores { get; set; }
+}
+
 
 public class GameLogic : MonoBehaviour
 {
-    //Character c;
+    
     public AbilityScores abilityscores;
-    //public Skill[] skills;
-    //public Race[] races;
-    //public Home[] homes;
+    public Skills skills;
     public Text displayscores;
     public Button[] buttons;
+
+    private string skillsJsonPath;
+    private string abilityScoresJsonPath;
+    private SkillsJson skillsJson;
+    private AbilityScoresJson abilityScoresJson;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //c = new Character();
-        InitializeAbilityScores();
-        var a = new int();
-        
-        var b = a;
+        skillsJsonPath = "Assets/Resources/SkillsJson.json";
+        abilityScoresJsonPath = "Assets/Resources/AbilityScoresJson.json";
+        var skilljson = File.ReadAllText(skillsJsonPath);
+        var abilscorejson = File.ReadAllText(abilityScoresJsonPath);
+        skillsJson = JsonConvert.DeserializeObject<SkillsJson>(skilljson);
+        abilityScoresJson = JsonConvert.DeserializeObject<AbilityScoresJson>(abilscorejson);
 
-        Debug.Log(a + " " + b);
-        a = 5;
-        Debug.Log(a + " " + b);
-        //this.InitializeSkills();
-        //this.RollAbilityScores();
+
+
+
+
+        InitializeAbilityScores();
+        
         this.StageOne();
+        DisplayScores();
 
     }
 
-
-    
-    private void InitializeAbilityScores()
+    //This rolls the scores
+    private void RollAbilityScores()
     {
-        string[] scores = abilityscores.GetNames();
-        for(int i = 0; i < scores.Length; i++)
+        int end = abilityscores.abilityScores.Count;
+        for (int i = 0; i < end; i++)
         {
-            abilityscores.SetScoreByName(scores[i], RandomRoll(3, 0, 6));
-            Debug.Log("Score: " + scores[i] + ". Total: " + abilityscores.GetScores()[i]);
+            abilityscores.SetScoreByName(abilityscores.GetScores()[i].GetName(), RandomRoll(3, 0, 6));
+            Debug.Log("Score: " + abilityscores.abilityScores[i].GetName() + ". Total: " + abilityscores.GetScores()[i].GetScore());
         }
         DisplayScores();
+    }
+    
+    //This populates the ability scores
+    private void InitializeAbilityScores()
+    {
+        int end = abilityScoresJson.abilityScores.Count;
+        for (int i = 0; i < end; i++)
+        {
+            abilityscores.AddAbilityScore(abilityScoresJson.abilityScores[i]);
+            Debug.Log("Initialized score: " + abilityScoresJson.abilityScores[i]);
+        }
+        this.RollAbilityScores();
+        DisplayScores();
+
+    }
+
+    private void InitializeSkills()
+    {
+        int end = skillsJson.skillTest.Count;
+        for(int i = 0; i < end; i++)
+        {
+
+        }
     }
 
 
@@ -100,15 +149,20 @@ public class GameLogic : MonoBehaviour
 
     private void DisplayScores()
     {
-        string[] n = abilityscores.GetNames();
-        int[] s = abilityscores.GetScores();
+        List<AbilityScore> s = abilityscores.GetScores();
 
         string a = "";
-        for(int i = 0; i < n.Length; i++)
+        int end = s.Count;
+        for(int i = 0; i < end; i++)
         {
-            a += n[i] + " " + s[i] + "\n";
+            a += s[i].GetName() + " " + s[i].GetScore() + "\n";
         }
         this.displayscores.text = a;
+    }
+
+    private void DisplaySkills()
+    {
+
     }
 
     private void StageOne()
@@ -119,24 +173,28 @@ public class GameLogic : MonoBehaviour
 
     private void SetAbilityScoreChoiceButtons()
     {
-        int l = this.buttons.Length;
+        
+        List<AbilityScore> s = abilityscores.GetScores();
         Text t;
-        for (int i = 0; i < l - 1; i++)
+
+        int end = s.Count;
+        for (int i = 0; i < end; i++)
         {
             t = this.buttons[i].GetComponentInChildren<Text>();
-            t.text = abilityscores.GetNames()[i];
+            t.text = s[i].GetName();
             int ac = i;
-            int[] ad = abilityscores.GetScores();
+            AbilityScore[] ad = abilityscores.GetScores().ToArray();
+            //List<AbilityScore> ad = abilityscores.GetScores();
             this.buttons[i].onClick.AddListener(() => ReplaceScores(ref ad[ac]));
         }
-        t = this.buttons[l - 1].GetComponentInChildren<Text>();
+        t = this.buttons[end].GetComponentInChildren<Text>();
         t.text = "None";
 
     }
 
-    private void ReplaceScores(ref int a)
+    private void ReplaceScores(ref AbilityScore a)
     {
-        a = 14;
+        a.SetScore(14);
         this.DisplayScores();
         for (int i = 0; i < this.buttons.Length; i++)
         {

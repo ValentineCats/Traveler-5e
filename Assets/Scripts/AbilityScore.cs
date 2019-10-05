@@ -11,7 +11,7 @@ public class AbilityScore : MonoBehaviour
     //testing
 
 
-    public AbilityScore(string n)
+    public void Initialize(string n)
     {
         this.scoreName = n;
         this.score = 10;
@@ -24,12 +24,15 @@ public class AbilityScore : MonoBehaviour
         if (this.score + b > this.maximum)
         {
             this.maximum += 2;
+            Debug.Log("Score " + this.GetName() + "'s maximum will be increased by 2 because " + (this.GetScore() + b) + " > " + this.GetMax());
             return this.score;
+
         }
         else
         {
             this.score += b;
             this.CalculateBonus();
+            Debug.Log("Score " + this.GetName() + " " + this.score + " will be increased by " + b);
             return this.score;
         }
 
@@ -58,7 +61,12 @@ public class AbilityScore : MonoBehaviour
 
     public string GetName()
     {
-        return this.name;
+        return this.scoreName;
+    }
+
+    public int GetMax()
+    {
+        return this.maximum;
     }
 
     public void CalculateBonus()

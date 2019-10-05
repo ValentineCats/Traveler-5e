@@ -4,81 +4,73 @@ using UnityEngine;
 
 public class AbilityScores : MonoBehaviour
 {
-    string[] names;
-    int[] scores;
-    int[] maximums;
-    public AbilityScore[] abilityScores;
+    //string[] names;
+    //int[] scores;
+    //int[] maximums;
+    public List<AbilityScore> abilityScores;
+    public GameObject abilityScoreContainerObject;
 
 
-
-    private void Start()
+    public void AddAbilityScore(string n)
     {
-        names = new string[6];
-        names[0] = "str";
-        names[1] = "dex";
-        names[2] = "con";
-        names[3] = "int";
-        names[4] = "wis";
-        names[5] = "cha";
-       
-        scores = new int[6];
-        maximums = new int[6];
+        // this.gameObject.transform.GetChild(0).gameObject.AddComponent<AbilityScore>();
+        GameObject o = Instantiate(abilityScoreContainerObject, new Vector3(0,0,0), Quaternion.identity);
+        o.transform.parent = this.gameObject.transform;
+        o.GetComponent<AbilityScore>().Initialize(n);
+        abilityScores.Add(o.GetComponent<AbilityScore>());
     }
 
-    public int IncreaseScoreByName(string n, int i)
+    public int IncreaseScoreByName(string n, int sco)
     {
-        int x = GetScoreIntByName(n);
-        if((scores[x] + i) > maximums[x])
-        {
-            Debug.Log("Score " + names[x] + "'s maximum will be increased by 2 because " + (scores[x] + i) + " > " + maximums[x]);
-            maximums[x] += 2;
-        }
-        else
-        {
-            Debug.Log("Score " + names[x] + " " + scores[x] + " will be increased by " + i); 
-            scores[x] += i;
-        }
-        
-        return scores[x];
+        this.GetListLocName(n).IncreaseScore(sco);
+        return this.GetListLocName(n).GetScore();
     }
 
-    public string[] GetNames()
-    {
-        return names;
-    }
-
-    public int[] GetScores()
-    {
-        return scores;
-    }
+    
 
     public int GetBonusByName(string n)
     {
-        int x = ((scores[GetScoreIntByName(n)] - 10) / 2);
-        return x;
+          return GetListLocName(n).GetBonus();
+       
+        
     }
+
+
 
     private int GetScoreIntByName(string n)
     {
-        for(int i = 0; i < names.Length; i++)
+        return GetListLocName(n).GetScore();
+    }
+
+    //utility that find the score by name. Used by many other methods
+    private AbilityScore GetListLocName(string n)
+    {
+        int end = this.abilityScores.Count;
+        int i;
+        for (i = 0; i < end; i++)
         {
-            if (names[i] == n)
+            if (n == this.abilityScores[i].GetName())
             {
-                
-                return i;
+               
+                return this.abilityScores[i];
             }
         }
+
         Debug.Log("Ability Score " + n + " not found");
-        return 0;
+        return this.abilityScores[0];
     }
 
 
-    public void SetScoreByName(string n, int i)
+    public void SetScoreByName(string n, int sco)
     {
-        int x = GetScoreIntByName(n);
-        scores[x] = i;
+        GetListLocName(n).SetScore(sco);
+        Debug.Log("Ability Score " + n + " not found");
     }
 
+    public List<AbilityScore> GetScores()
+    {
+        return this.abilityScores;
+    }
 
 
 

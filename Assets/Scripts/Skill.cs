@@ -7,13 +7,14 @@ public class Skill : MonoBehaviour
     public string skillname;
     public bool proficient;
     public int ranks;
-    public SubSkill[] subskills;
-    public AbilityScore score;
+    public List<SubSkill> subskills;
+    public List<AbilityScore> scores;
 
 
-
+    /*
     private void Start()
     {
+        
         this.skillname = this.name.ToLower();
         if (this.name.ToLower() != this.skillname)
         {
@@ -21,27 +22,29 @@ public class Skill : MonoBehaviour
         }
         subskills = this.GetComponentsInChildren<SubSkill>();
         
-    }
+}*/
 
-    public Skill(string n, AbilityScore s, string[] ss)
+    public Skill(string n, List<AbilityScore> ab, List<string> ss)
     {
         this.skillname = n;
         this.proficient = false;
         this.ranks = 0;
-        this.score = s;
-        for(int i = 0; i < ss.Length; i++)
+        this.scores = ab;
+
+        int ssEnd = ss.Count; 
+        for(int i = 0; i < ssEnd; i++)
         {
             this.AddSubskill(ss[i]);
         }
     }
 
-    public Skill(string n, AbilityScore s)
+    public Skill(string n, List<AbilityScore> ab)
     {
         this.skillname = n;
         this.proficient = false;
         this.ranks = 0;
-        this.score = s;
-        
+        this.scores = ab;
+        this.subskills = null;
     }
 
 
@@ -62,7 +65,21 @@ public class Skill : MonoBehaviour
 
     public int GetBonus()
     {
-        return this.ranks + this.score.GetBonus();
+        return this.ranks + this.ChooseScore().GetBonus();
+    }
+
+    private AbilityScore ChooseScore()
+    {
+        int end = this.scores.Count;
+        int max = 0;
+        for(int i = 0; i < end; i++)
+        {
+            if(this.scores[i].GetBonus() > this.scores[max].GetBonus())
+            {
+                max = i;
+            }
+        }
+        return this.scores[max];
     }
 
     public int GetRanks()
@@ -94,9 +111,10 @@ public class Skill : MonoBehaviour
         return 0;
     }
 
-    public void AddSubskill(string s)
+    public void AddSubskill(string n)
     {
-        //subskills.Add(s, 0);
+        SubSkill sub = new SubSkill(n);
+        subskills.Add(sub);
 
     }
     /*

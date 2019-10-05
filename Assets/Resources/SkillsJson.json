@@ -1,5 +1,5 @@
 {
-	"skillTest": [{
+	"skillJson": [{
 			"name": "acrobatics",
 			"score": ["dexterity"],
 			"subskills": ["jump", "balance", "stunt", "escape"]
