@@ -2,15 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartingLocation : MonoBehaviour
+public class StartingLocation
 {
-    Skill skill;
+    string skill;
+    string location;
 
-
-    public void Increase()
+    public StartingLocation(string s, string l)
     {
-        skill.AddRanks(0);
+        this.skill = s;
+        this.location = l;
     }
+
+
+
+    public string GetSkill()
+    {
+        return this.skill;
+    }
+
+    public string GetLocation()
+    {
+        return this.location;
+    }
+
+
+    
 
 
 }

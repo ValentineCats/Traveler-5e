@@ -51,13 +51,13 @@ public class AbilityScores : MonoBehaviour
     }
 
     //utility that find the score by name. Used by many other methods
-    private AbilityScore GetListLocName(string n)
+    public AbilityScore GetListLocName(string n)
     {
         int end = this.abilityScores.Count;
         int i;
         for (i = 0; i < end; i++)
         {
-            if (n == this.abilityScores[i].GetName())
+            if (n.ToLower() == this.abilityScores[i].GetName().ToLower())
             {
                
                 return this.abilityScores[i];
@@ -72,7 +72,7 @@ public class AbilityScores : MonoBehaviour
     public void SetScoreByName(string n, int sco)
     {
         GetListLocName(n).SetScore(sco);
-        Debug.Log("Ability Score " + n + " not found");
+        //Debug.Log("Ability Score " + n + " not found");
     }
 
     public List<AbilityScore> GetScores()

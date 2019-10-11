@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skill : MonoBehaviour
+public class Skill
 {
     public string skillname;
     public bool proficient;
@@ -30,8 +30,9 @@ public class Skill : MonoBehaviour
         this.proficient = false;
         this.ranks = 0;
         this.scores = ab;
+        this.subskills = new List<SubSkill>();
 
-        int ssEnd = ss.Count; 
+        int ssEnd = ss.Count;
         for(int i = 0; i < ssEnd; i++)
         {
             this.AddSubskill(ss[i]);

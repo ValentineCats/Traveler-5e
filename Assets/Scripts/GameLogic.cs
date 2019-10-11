@@ -6,7 +6,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 
-public class SkillJson
+public class SkillTest
 {
     public string name { get; set; }
     public List<string> score { get; set; }
@@ -15,7 +15,7 @@ public class SkillJson
 
 public class SkillsJson
 {
-    public List<SkillJson> skillTest { get; set; }
+    public List<SkillTest> skillTest { get; set; }
 }
 
 public class AbilityScoresJson
@@ -24,18 +24,34 @@ public class AbilityScoresJson
 }
 
 
+public class Homeland
+{
+    public string home { get; set; }
+    public string skill { get; set; }
+}
+
+public class HomelandsJson
+{
+    public List<Homeland> homelands { get; set; }
+}
+
+
 public class GameLogic : MonoBehaviour
 {
     
     public AbilityScores abilityscores;
     public Skills skills;
+    public List<StartingLocation> startinglocations; 
     public Text displayscores;
+    public Text displayskills;
     public Button[] buttons;
 
     private string skillsJsonPath;
     private string abilityScoresJsonPath;
+    private string homelandJsonPath;
     private SkillsJson skillsJson;
     private AbilityScoresJson abilityScoresJson;
+    private HomelandsJson homelandsJson;
 
 
     // Start is called before the first frame update
@@ -43,19 +59,26 @@ public class GameLogic : MonoBehaviour
     {
         skillsJsonPath = "Assets/Resources/SkillsJson.json";
         abilityScoresJsonPath = "Assets/Resources/AbilityScoresJson.json";
+        homelandJsonPath = "Assets/Resources/HomelandsJson.json";
         var skilljson = File.ReadAllText(skillsJsonPath);
         var abilscorejson = File.ReadAllText(abilityScoresJsonPath);
+        var homelandsjson = File.ReadAllText(homelandJsonPath);
         skillsJson = JsonConvert.DeserializeObject<SkillsJson>(skilljson);
         abilityScoresJson = JsonConvert.DeserializeObject<AbilityScoresJson>(abilscorejson);
+        homelandsJson = JsonConvert.DeserializeObject<HomelandsJson>(homelandsjson);
 
 
 
 
 
         InitializeAbilityScores();
-        
+        InitializeSkills();
+        InitializeHomeland();
+
+        this.ChooseHome();
         this.StageOne();
         DisplayScores();
+        DisplaySkills();
 
     }
 
@@ -87,10 +110,52 @@ public class GameLogic : MonoBehaviour
 
     private void InitializeSkills()
     {
-        int end = skillsJson.skillTest.Count;
-        for(int i = 0; i < end; i++)
-        {
+        int skillEnd = skillsJson.skillTest.Count;
+        List<AbilityScore> abs;
+        int absEnd;
+        SkillTest skl;
+        int ssEnd;
+        List<string> sskl;
+        int i,z,x;
 
+
+
+        for(i = 0; i < skillEnd; i++)
+        {
+            skl = skillsJson.skillTest[i];
+            abs = new List<AbilityScore>();
+            sskl = new List<string>();
+            //skl.subskills = skillsJson.skillTest[i].subskills;
+            absEnd = skl.score.Count;
+            for (z = 0; z < absEnd; z++)
+            {
+                abs.Add(abilityscores.GetListLocName(skl.score[z]));
+            }
+            if(skl.subskills != null)
+            {
+                ssEnd = skl.subskills.Count;
+                for (x = 0; x < ssEnd; x++)
+                {
+                    sskl.Add(skl.subskills[x]);
+                }
+            }
+            else
+            {
+                sskl = new List<string>();
+            }
+            
+            skills.AddSkill(skillsJson.skillTest[i].name, abs, sskl);
+        }
+    }
+
+    private void InitializeHomeland()
+    {
+        this.startinglocations = new List<StartingLocation>();
+        int end = this.homelandsJson.homelands.Count;
+        StartingLocation star;
+        for (int i = 0; i < end; i++)
+        {
+            star = new StartingLocation(this.homelandsJson.homelands[i].home, this.homelandsJson.homelands[i].skill);
         }
     }
 
@@ -162,6 +227,26 @@ public class GameLogic : MonoBehaviour
 
     private void DisplaySkills()
     {
+        List<Skill> s = skills.skills;
+        string a = "";
+
+        int sEnd = s.Count;
+        int z;
+        int ssEnd;
+        Debug.Log("Displaying Skills");
+        for(int i = 0; i < sEnd; i++)
+        {
+
+            a += s[i].GetName() + " " + s[i].GetRanks() + "\n";
+            ssEnd = s[i].subskills.Count;
+            Debug.Log("Displaying Skill " + s[i].GetName());
+            for (z = 0; z < ssEnd; z++)
+            {
+                Debug.Log("Displaying SubSkill " + s[i].subskills[z].subskillname);
+                a += "  " + s[i].subskills[z].subskillname + " " + s[i].subskills[z].ranks + "\n";
+            }
+        }
+        this.displayskills.text = a;
 
     }
 
@@ -202,6 +287,16 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+
+    private void ChooseHome()
+    {
+        int roll = Random.Range(0, this.startinglocations.Count); ;
+        if(roll > 0)
+        {
+            this.skills.GetSkill(this.startinglocations[roll].GetSkill()).AddRanks(1);
+            Debug.Log(this.startinglocations[roll].GetSkill() + " " + this.startinglocations[roll].GetType());
+        }
+    }
 
 
 
