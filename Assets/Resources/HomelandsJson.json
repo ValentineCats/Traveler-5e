@@ -1,73 +1,84 @@
 {
-	"homelands": [{
-			"home": "circus",
-			"skill": "acrobatics"
-		},
-		{
-			"home": "migratory",
-			"skill": "animal handling"
-		},
-		{
-			"home": "academy",
-			"skill": "arcana"
-		},
-		{
-			"home": "seafaring",
-			"skill": "athletics"
-		},
-		{
-			"home": "royal court",
-			"skill": "deception"
-		},
-		{
-			"home": "aristocrat",
-			"skill": "history"
-		},
-		{
-			"home": "bar",
-			"skill": "insight"
-		},
-		{
-			"home": "mafia",
-			"skill": "intimidate"
-		},
-		{
-			"home": "law enforcement",
-			"skill": "investigation"
-		},
-		{
-			"home": "apothecary",
-			"skill": "medicine"
-		},
-		{
-			"home": "woodlands",
-			"skill": "nature"
-		}, {
-			"home": "plains",
-			"skill": "perception"
-		}, {
-			"home": "theater",
-			"skill": "performance"
-		}, {
-			"home": "merchant",
-			"skill": "persuasion"
-		},
-		{
-			"home": "monastery",
-			"skill": "religion"
-		}, {
-			"home": "undercity",
-			"skill": "sleight of hand"
-		}, {
-			"home": "wastelands",
-			"skill": "survival"
-		}, {
-			"home": "raiders",
-			"skill": "melee weapon skill"
-		},
-		{
-			"home": "riders",
-			"skill": "ranged weapon skill"
-		}
-	]
+  "homelands": [
+    {
+      "home": "circus",
+      "skill": "acrobatics"
+    },
+    {
+      "home": "migratory",
+      "skill": "animal handling"
+    },
+    {
+      "home": "academy",
+      "skill": "arcana"
+    },
+    {
+      "home": "seafaring",
+      "skill": "athletics"
+    },
+    {
+      "home": "royal court",
+      "skill": "deception"
+    },
+    {
+      "home": "aristocrat",
+      "skill": "history"
+    },
+    {
+      "home": "bar",
+      "skill": "insight"
+    },
+    {
+      "home": "mafia",
+      "skill": "intimidate"
+    },
+    {
+      "home": "law enforcement",
+      "skill": "investigation"
+    },
+    {
+      "home": "apothecary",
+      "skill": "medicine"
+    },
+    {
+      "home": "woodlands",
+      "skill": "nature"
+    },
+    {
+      "home": "plains",
+      "skill": "perception"
+    },
+    {
+      "home": "theater",
+      "skill": "performance"
+    },
+    {
+      "home": "merchant",
+      "skill": "persuasion"
+    },
+    {
+      "home": "monastery",
+      "skill": "religion"
+    },
+    {
+      "home": "undercity",
+      "skill": "sleight of hand"
+    },
+    {
+      "home": "underdark",
+      "skill": "stealth"
+    },
+    {
+      "home": "wastelands",
+      "skill": "survival"
+    },
+    {
+      "home": "raiders",
+      "skill": "melee weapon skill"
+    },
+    {
+      "home": "riders",
+      "skill": "ranged weapon skill"
+    }
+  ]
 }

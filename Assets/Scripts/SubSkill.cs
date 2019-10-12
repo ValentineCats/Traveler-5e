@@ -27,17 +27,17 @@ public class SubSkill
         
     }*/
     
-    public string getSubSkillName()
+    public string GetSubSkillName()
     {
         return this.subskillname;
     }
 
-    public int getRanks()
+    public int GetRanks()
     {
         return this.ranks;
     }
 
-    public void Rank(int i)
+    public void AddRank(int i)
     {
         this.ranks += i;
         if(this.ranks < 0)
@@ -46,7 +46,7 @@ public class SubSkill
         }
     }
 
-    public void Rank(int i, int max)
+    public void AddRank(int i, int max)
     {
         if(max >= this.ranks)
         {
@@ -59,5 +59,6 @@ public class SubSkill
             this.ranks = 0;
         }
     }
+
 
 }

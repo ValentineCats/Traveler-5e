@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class AbilityScores : MonoBehaviour
+public class AbilityScores
 {
     //string[] names;
     //int[] scores;
@@ -10,44 +11,70 @@ public class AbilityScores : MonoBehaviour
     public List<AbilityScore> abilityScores;
     //public GameObject abilityScoreContainerObject;
 
-    AbilityScores()
+    public AbilityScores()
     {
         abilityScores = new List<AbilityScore>();
     }
 
 
-    public void AddAbilityScore(string name)
+    public void AddAbilityScore(string name, int score)
     {
         // this.gameObject.transform.GetChild(0).gameObject.AddComponent<AbilityScore>();
        // GameObject o = Instantiate(abilityScoreContainerObject, new Vector3(0,0,0), Quaternion.identity);
         //o.transform.parent = this.gameObject.transform;
 
         //o.GetComponent<AbilityShim>().Initialize(n);
-        AbilityScore abilityScore = new AbilityScore();
-        abilityScore.Initialize(name);
+        AbilityScore abilityScore = new AbilityScore(name, score);
+        //abilityScore.Initialize(name);
         abilityScores.Add(abilityScore);
     }
 
-    public int IncreaseScoreByName(string n, int sco)
+    public void IncreaseScoreByName(string n, int sco)
     {
-        this.GetListLocName(n).IncreaseScore(sco);
-        return this.GetListLocName(n).GetScore();
+        int x;
+        try
+        {
+            x = GetListLocName(n).IncreaseScore(sco);
+
+        }
+        catch (ScoreNotFoundException ex)
+        {
+            throw ex;
+        }
+        
     }
 
     
 
     public int GetBonusByName(string n)
     {
-          return GetListLocName(n).GetBonus();
-       
-        
+        int x;
+        try
+        {
+            x = GetListLocName(n).GetBonus();
+
+        }
+        catch (ScoreNotFoundException ex)
+        {
+            throw ex;
+        }
+        return x;
     }
 
 
 
     private int GetScoreIntByName(string n)
     {
-        return GetListLocName(n).GetScore();
+        int x;
+        try
+        {
+            x = GetListLocName(n).GetScore();
+            
+        }catch(ScoreNotFoundException ex)
+        {
+            throw ex;
+        }
+        return x;
     }
 
     //utility that find the score by name. Used by many other methods
@@ -63,9 +90,8 @@ public class AbilityScores : MonoBehaviour
                 return this.abilityScores[i];
             }
         }
-
-        Debug.Log("Ability Score " + n + " not found");
-        return this.abilityScores[0];
+        throw new ScoreNotFoundException("Unable to find score with name " + n);
+        
     }
 
 
@@ -79,55 +105,16 @@ public class AbilityScores : MonoBehaviour
     {
         return this.abilityScores;
     }
+}
 
 
+[Serializable]
+public class ScoreNotFoundException : Exception
+{
 
-    /*
-    //returns false if no dangerous scores
-    public int IncreaseScore(int b)
+    public ScoreNotFoundException(string danger)
+        :base(danger)
     {
-        if (this.score + b > this.maximum)
-        {
-            this.maximum += 2;
-            return this.score;
-        }
-        else
-        {
-            this.score += b;
-            this.CalculateBonus();
-            return this.score;
-        }
 
     }
-
-    public void SetScore(int s)
-    {
-        this.score = s;
-        this.CalculateBonus();
-    }
-
-    public int GetBonus()
-    {
-        return this.bonus;
-    }
-
-    public ref int GetScore()
-    {
-        return ref this.score;
-    }
-
-    public int GetScoreValue()
-    {
-        return this.score;
-    }
-
-    public string GetName()
-    {
-        return this.name;
-    }
-
-    public void CalculateBonus()
-    {
-        this.bonus = (this.score - 10) / 2;
-    }*/
 }

@@ -30,5 +30,10 @@ public class Skills : MonoBehaviour
         return skills[0];
     }
 
+    public List<Skill> GetSkills()
+    {
+        return this.skills;
+    }
+
 
 }

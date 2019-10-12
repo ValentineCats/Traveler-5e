@@ -15,6 +15,13 @@ public class AbilityScore
     public int maximum;
     //testing
 
+    public AbilityScore(string n, int s)
+    {
+        this.scoreName = n;
+        this.score = s;
+        this.maximum = 20;
+        this.CalculateBonus();
+    }
 
     public void Initialize(string name)
     {

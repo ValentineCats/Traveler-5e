@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Skill
 {
@@ -63,10 +64,60 @@ public class Skill
             ranks += r;
         }
     }
+    public void AddSubSkillRanks(string s, int r)
+    {
+
+        int i = r;
+        if (this.proficient == false)
+        {
+            this.proficient = true;
+            i--;
+        }
+        if (i > 0)
+        {
+            ranks += r;
+        }
+    }
 
     public int GetBonus()
     {
-        return this.ranks + this.ChooseScore().GetBonus();
+        
+        try
+        {
+            if (this.proficient == false)
+            {
+                return this.ranks + this.ChooseScore().GetBonus() - 2;
+            }
+            else
+            {
+                return this.ranks + this.ChooseScore().GetBonus();
+            }
+        }
+        catch (SubSkillNotFoundException ex)
+        {
+            throw ex;
+        }
+    }
+
+    public int GetBonus(string s)
+    {
+        try
+        {
+            if (this.proficient == false)
+            {
+                return this.ranks + GetSubskillListLocName(s).GetRanks() + this.ChooseScore().GetBonus() - 2;
+            }
+            else
+            {
+                return this.ranks + GetSubskillListLocName(s).GetRanks() + this.ChooseScore().GetBonus();
+            }
+        }
+        catch(SubSkillNotFoundException ex)
+        {
+            throw ex;
+        }
+        
+
     }
 
     private AbilityScore ChooseScore()
@@ -93,24 +144,22 @@ public class Skill
         return this.skillname;
     }
 
-    public int GetBonus(string s)
+    private SubSkill GetSubskillListLocName(string name)
     {
-        /*
-        if (this.subskills.ContainsKey(s))
+        int end = this.subskills.Count;
+        int i;
+        for (i = 0; i < end; i++)
         {
-            if (this.proficient)
+            if (name == this.subskills[i].GetSubSkillName())
             {
-                return this.ranks + this.score.GetBonus() + (int)this.subskills[s];
+
+                return this.subskills[i];
             }
         }
-        else if(this.proficient)
-        {
-            return this.ranks + this.score.GetBonus();
-            
-        }
-        return this.score.GetBonus() - 2;*/
-        return 0;
+        throw new SubSkillNotFoundException("Unable to find subskill with name " + name);
     }
+
+   
 
     public void AddSubskill(string n)
     {
@@ -118,28 +167,16 @@ public class Skill
         subskills.Add(sub);
 
     }
-    /*
-    public static bool operator ==(Skill c1, Skill c2)
-    {
-        if (c1.GetName() == c2.GetName())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    
+}
 
-    public static bool operator !=(Skill c1, Skill c2)
+[Serializable]
+public class SubSkillNotFoundException : Exception
+{
+
+    public SubSkillNotFoundException(string danger)
+        : base(danger)
     {
-        if (c1.GetName() != c2.GetName())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }*/
+
+    }
 }
