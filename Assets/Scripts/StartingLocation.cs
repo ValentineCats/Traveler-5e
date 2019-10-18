@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class StartingLocation
 {
-    string skill;
+    Skill skill;
     string location;
 
-    public StartingLocation(string s, string l)
+    public StartingLocation(string loc, Skill sk)
     {
-        this.skill = s;
-        this.location = l;
+        this.location = loc;
+        this.skill = sk;
     }
 
 
 
-    public string GetSkill()
+    public Skill GetSkill()
     {
         return this.skill;
     }

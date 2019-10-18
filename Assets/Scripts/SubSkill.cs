@@ -5,8 +5,8 @@ using UnityEngine;
 public class SubSkill
 {
 
-    public string subskillname;
-    public int ranks;
+    private string subskillname;
+    private int ranks;
     //public Skill skill;
 
     public SubSkill(string n)

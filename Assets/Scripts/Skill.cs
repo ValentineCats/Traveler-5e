@@ -5,11 +5,11 @@ using System;
 
 public class Skill
 {
-    public string skillname;
-    public bool proficient;
-    public int ranks;
-    public List<SubSkill> subskills;
-    public List<AbilityScore> scores;
+    private string skillname;
+    private bool proficient;
+    private int ranks;
+    private List<SubSkill> subskills;
+    private List<AbilityScore> scores;
 
 
     /*
@@ -99,17 +99,22 @@ public class Skill
         }
     }
 
+    public List<SubSkill> GetSubskills()
+    {
+        return this.subskills;
+    }
+
     public int GetBonus(string s)
     {
         try
         {
             if (this.proficient == false)
             {
-                return this.ranks + GetSubskillListLocName(s).GetRanks() + this.ChooseScore().GetBonus() - 2;
+                return this.ranks + GetSubskillByName(s).GetRanks() + this.ChooseScore().GetBonus() - 2;
             }
             else
             {
-                return this.ranks + GetSubskillListLocName(s).GetRanks() + this.ChooseScore().GetBonus();
+                return this.ranks + GetSubskillByName(s).GetRanks() + this.ChooseScore().GetBonus();
             }
         }
         catch(SubSkillNotFoundException ex)
@@ -144,7 +149,7 @@ public class Skill
         return this.skillname;
     }
 
-    private SubSkill GetSubskillListLocName(string name)
+    private SubSkill GetSubskillByName(string name)
     {
         int end = this.subskills.Count;
         int i;
@@ -169,6 +174,8 @@ public class Skill
     }
     
 }
+
+
 
 [Serializable]
 public class SubSkillNotFoundException : Exception

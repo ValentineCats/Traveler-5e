@@ -38,14 +38,19 @@ public class HomelandsJson
 
 public class GameLogic : MonoBehaviour
 {
-    
-    public AbilityScores abilityscores;
-    public Skills skills;
-    public List<StartingLocation> startinglocations; 
+
+    private CharacterLogicContainer character;
+
+    public GameObject abilityScoreChoiceButtonPrefab;
+    public GameObject menueCanvas;
+
+    //public AbilityScores abilityscores;
+    //public Skills skills;
+    //public List<StartingLocation> startinglocations; 
     public Text displayscores;
     public Text displayskills;
-    public Button[] buttons;
-    public Button continueButton;
+    private GameObject[] buttons;
+    private Button continueButton;
 
     private string skillsJsonPath;
     private string abilityScoresJsonPath;
@@ -68,6 +73,8 @@ public class GameLogic : MonoBehaviour
         abilityScoresJson = JsonConvert.DeserializeObject<AbilityScoresJson>(abilscorejson);
         homelandsJson = JsonConvert.DeserializeObject<HomelandsJson>(homelandsjson);
 
+        character = new CharacterLogicContainer();
+
 
 
 
@@ -77,218 +84,164 @@ public class GameLogic : MonoBehaviour
         InitializeHomeland();
 
         
-        this.StageOne();
-        this.ChooseHome();
-        DisplayScores();
-        DisplaySkills();
+        this.StageOneAbilityScores();
+        //this.ChooseHome();
+        Display();
 
     }
 
-    //This rolls the scores
-    private void RollAbilityScores()
-    {
-        Debug.Log("Rolling ability scores");
-        int end = abilityscores.abilityScores.Count;
-        for (int i = 0; i < end; i++)
-        {
-            abilityscores.SetScoreByName(abilityscores.GetScores()[i].GetName(), RandomRoll(3, 0, 6));
-            Debug.Log("Score: " + abilityscores.abilityScores[i].GetName() + ". Total: " + abilityscores.GetScores()[i].GetScore());
-        }
-        DisplayScores();
-    }
+
+    
+    
     
     //This populates the ability scores
     private void InitializeAbilityScores()
     {
         Debug.Log("Initializing ability scores");
-        abilityscores = new AbilityScores();
+        //abilityscores = new AbilityScores();
         int end = abilityScoresJson.abilityScores.Count;
+           
+
         for (int i = 0; i < end; i++)
         {
-            abilityscores.AddAbilityScore(abilityScoresJson.abilityScores[i], 10);
-            Debug.Log("Initialized score: " + abilityScoresJson.abilityScores[i]);
+            Debug.Log("Initializing score: " + abilityScoresJson.abilityScores[i]);
+            character.AddAbilityScore(abilityScoresJson.abilityScores[i], 10);
+            
         }
-        this.RollAbilityScores();
-        DisplayScores();
-
+        try
+        {
+            this.character.RollAbilityScores(3, 0, 6);
+        } catch(RandomRollFailed ex)
+        {
+            Debug.Log(ex.Message);
+            Debug.Log("Failed to roll ability scores");
+        }
+        
     }
 
+
+    //This reads from the json files creates the character using the SkillTest classes created from the json files 
     private void InitializeSkills()
     {
         Debug.Log("Initializing skills");
         int skillEnd = skillsJson.skillTest.Count;
-        List<AbilityScore> abs;
-        int absEnd;
-        SkillTest skl;
-        int ssEnd;
-        List<string> sskl;
-        int i,z,x;
-
-
-
-        for(i = 0; i < skillEnd; i++)
+ 
+        for(int i = 0; i < skillEnd; i++)
         {
-            skl = skillsJson.skillTest[i];
-            abs = new List<AbilityScore>();
-            sskl = new List<string>();
-            //skl.subskills = skillsJson.skillTest[i].subskills;
-            absEnd = skl.score.Count;
-            for (z = 0; z < absEnd; z++)
+            
+            try
             {
-                abs.Add(abilityscores.GetListLocName(skl.score[z]));
-            }
-            if(skl.subskills != null)
-            {
-                ssEnd = skl.subskills.Count;
-                for (x = 0; x < ssEnd; x++)
+                if (skillsJson.skillTest[i].subskills != null)
                 {
-                    sskl.Add(skl.subskills[x]);
+                    character.AddSkill(skillsJson.skillTest[i].name, skillsJson.skillTest[i].score, skillsJson.skillTest[i].subskills);
                 }
-            }
-            else
+                else
+                {
+                    List<string> sskl = new List<string>();
+                    character.AddSkill(skillsJson.skillTest[i].name, skillsJson.skillTest[i].score, sskl);
+                }
+
+            } catch(ScoreNotFoundException ex)
             {
-                sskl = new List<string>();
+                Debug.Log(ex.Message);
+                Debug.Log("Failed to initialize skill: " + skillsJson.skillTest[i].name);
             }
             
-            skills.AddSkill(skillsJson.skillTest[i].name, abs, sskl);
         }
     }
 
     private void InitializeHomeland()
     {
         Debug.Log("Initializing homeland");
-        this.startinglocations = new List<StartingLocation>();
-        int end = this.homelandsJson.homelands.Count;
-        StartingLocation star;
-        for (int i = 0; i < end; i++)
+        int i = 0;
+        try
         {
-            star = new StartingLocation(this.homelandsJson.homelands[i].home, this.homelandsJson.homelands[i].skill);
-            this.startinglocations.Add(star);
-        }
-    }
-
-
-    private int RandomRoll(int numberOfDice, int numberOfLowestRemoved, int diceSize)
-    {
-        if(numberOfDice <= numberOfLowestRemoved)
-        {
-            Debug.Log("Removing more dice than are being rolled");
-            return 0;
-        }
-        if(diceSize < 1)
-        {
-            Debug.Log("Rolling dice of size 0 or lower");
-            return 0;
-        }
-        if(numberOfDice < 1)
-        {
-            Debug.Log("Rolling 0 or fewer dice");
-            return 0;
-        }
-
-        int[] total = new int[numberOfDice];
-        //rolling the dice
-        for (int i = 0; i < numberOfDice; i++)
-        {
-            total[i] = Random.Range(1, (diceSize + 1));
-            Debug.Log("Rolled: " + total[i]);
-        }
-
-        //remove the lowest dice
-        int x;
-        for (int i = 0; i < numberOfLowestRemoved; i++)
-        {
-            x = 0;
-            for(int z = 0; z < numberOfDice; z++)
+            int end = this.homelandsJson.homelands.Count;
+            //StartingLocation star;
+            for (i = 0; i < end; i++)
             {
-                if (total[z] < total[x] || (total[x] == 0 && total[z] != 0))
-                {
-                    Debug.Log(total[z] + " is less than " + total[x] + ", or " + total[x] + " eqauls 0 and " + total[z] + "does not equal 0");
-                    x = z;
-                }
+                character.AddHomeland(this.homelandsJson.homelands[i].home, this.homelandsJson.homelands[i].skill);
             }
-            total[x] = 0;
-        }
-
-        int sum = 0;
-        //summing up the total
-        for(int i = 0; i < numberOfDice; i++)
+        } catch(SkillNotFoundException ex)
         {
-            sum += total[i];
+            Debug.Log(ex.Message);
+            Debug.Log("Failed to initialize homeland: " + skillsJson.skillTest[i].name);
         }
-
-        return sum;
     }
+
+
 
     private void DisplayScores()
     {
         Debug.Log("Displaying ability scores");
-        List<AbilityScore> s = abilityscores.GetScores();
 
-        string a = "";
-        int end = s.Count;
-        for(int i = 0; i < end; i++)
-        {
-            a += s[i].GetName() + " " + s[i].GetScore() + "\n";
-        }
+        string a = character.GetScoresAsString();
         this.displayscores.text = a;
     }
 
     private void DisplaySkills()
     {
         Debug.Log("Displaying skills");
-        List<Skill> s = skills.GetSkills();
-        string a = "";
 
-        int sEnd = s.Count;
-        int z;
-        int ssEnd;
-        
-        for(int i = 0; i < sEnd; i++)
-        {
 
-            a += s[i].GetName() + " " + s[i].GetBonus() + "\n";
-            ssEnd = s[i].subskills.Count;
-            //Debug.Log("Displaying Skill " + s[i].GetName());
-            for (z = 0; z < ssEnd; z++)
-            {
-                //Debug.Log("Displaying SubSkill " + s[i].subskills[z].subskillname);
-                a += "  " + s[i].subskills[z].subskillname + " " + s[i].GetBonus(s[i].subskills[z].subskillname) + "\n";
-            }
-            ssEnd = 0;
-        }
+        string a = character.GetSkillsAsString();
         this.displayskills.text = a;
 
     }
 
-    private void StageOne()
+    private void Display()
+    {
+        this.DisplayScores();
+        this.DisplaySkills();
+    }
+
+    private void StageOneAbilityScores()
     {
         Debug.Log("Stage 1");
-        this.DisplayScores();
+        this.Display();
         this.SetAbilityScoreChoiceButtons();
     }
 
     private void SetAbilityScoreChoiceButtons()
     {
         Debug.Log("Setting ability score choice buttons");
-        List<AbilityScore> s = abilityscores.GetScores();
+        //List<AbilityScore> s = abilityscores.GetScores();
         Text t;
+        GameObject go;
+        string score;
 
-        int end = s.Count;
+        int end = character.GetScoreSize();
+        buttons = new GameObject[end];
         for (int i = 0; i < end; i++)
         {
-            t = this.buttons[i].GetComponentInChildren<Text>();
+            go = Instantiate(abilityScoreChoiceButtonPrefab, new Vector3(i*5, i*10, 0), Quaternion.identity) as GameObject;
+            t = go.GetComponentInChildren<Text>();
+            t.text = character.GetScoreByIndex(i).GetName();
+            go.transform.SetParent(menueCanvas.transform);
+            buttons[i] = go;
+            score = character.GetScoreByIndex(i).GetName();
+            buttons[i].GetComponent<Button>().onClick.AddListener(()=> ReplaceScores(score));
+            /*t = this.buttons[i].GetComponentInChildren<Text>();
             t.text = s[i].GetName();
             int ac = i;
             AbilityScore[] ad = abilityscores.GetScores().ToArray();
             //List<AbilityScore> ad = abilityscores.GetScores();
-            this.buttons[i].onClick.AddListener(() => ReplaceScores(ref ad[ac]));
+            this.buttons[i].onClick.AddListener(() => ReplaceScores(ref ad[ac]));*/
         }
-        t = this.buttons[end].GetComponentInChildren<Text>();
-        t.text = "None";
+        //t = this.buttons[end].GetComponentInChildren<Text>();
+        //t.text = "None";
 
     }
 
+    
+    private void ReplaceScores(string name)
+    {
+        character.SetScoreByName(name, 14);
+        this.Display();
+    }
+
+
+    /*
     private void ReplaceScores(ref AbilityScore a)
     {
         a.SetScore(14);
@@ -298,8 +251,9 @@ public class GameLogic : MonoBehaviour
             this.buttons[i].gameObject.SetActive(false);
         }
     }
+    */
 
-
+        /*
     private void ChooseHome()
     {
         Debug.Log("Choosing a home");
@@ -308,10 +262,64 @@ public class GameLogic : MonoBehaviour
 
         Debug.Log(this.startinglocations[roll].GetSkill() + " " + this.startinglocations[roll].GetType());
         
+    }*/
+
+
+
+
+
+    /*
+private int RandomRoll(int numberOfDice, int numberOfLowestRemoved, int diceSize)
+{
+    if(numberOfDice <= numberOfLowestRemoved)
+    {
+        Debug.Log("Removing more dice than are being rolled");
+        return 0;
+    }
+    if(diceSize < 1)
+    {
+        Debug.Log("Rolling dice of size 0 or lower");
+        return 0;
+    }
+    if(numberOfDice < 1)
+    {
+        Debug.Log("Rolling 0 or fewer dice");
+        return 0;
     }
 
+    int[] total = new int[numberOfDice];
+    //rolling the dice
+    for (int i = 0; i < numberOfDice; i++)
+    {
+        total[i] = Random.Range(1, (diceSize + 1));
+        Debug.Log("Rolled: " + total[i]);
+    }
 
+    //remove the lowest dice
+    int x;
+    for (int i = 0; i < numberOfLowestRemoved; i++)
+    {
+        x = 0;
+        for(int z = 0; z < numberOfDice; z++)
+        {
+            if (total[z] < total[x] || (total[x] == 0 && total[z] != 0))
+            {
+                Debug.Log(total[z] + " is less than " + total[x] + ", or " + total[x] + " eqauls 0 and " + total[z] + "does not equal 0");
+                x = z;
+            }
+        }
+        total[x] = 0;
+    }
 
+    int sum = 0;
+    //summing up the total
+    for(int i = 0; i < numberOfDice; i++)
+    {
+        sum += total[i];
+    }
+
+    return sum;
+}*/
 
 
     /*
@@ -408,9 +416,23 @@ private void ReplaceScore(ref AbilityScore a)
     }
 }
 
+
+
 private void StageTwo()
 {
 
 }*/
 
+    /*This rolls the scores
+    private void RollAbilityScores()
+    {
+        Debug.Log("Rolling ability scores");
+        int end = character.GetScoreSize();
+        for (int i = 0; i < end; i++)
+        {
+            character.SetScoreByName(abilityscores.GetScores()[i].GetName(), RandomRoll(3, 0, 6));
+            Debug.Log("Score: " + abilityscores.abilityScores[i].GetName() + ". Total: " + abilityscores.GetScores()[i].GetScore());
+        }
+        DisplayScores();
+    }*/
 }

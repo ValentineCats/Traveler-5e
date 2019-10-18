@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityShim
-{
-
-}
 
 public class AbilityScore 
 {
-    public string scoreName;
-    public int score;
-    public int bonus;
-    public int maximum;
+    private string scoreName;
+    private int score;
+    private int bonus;
+    private int maximum;
     //testing
 
     public AbilityScore(string n, int s)

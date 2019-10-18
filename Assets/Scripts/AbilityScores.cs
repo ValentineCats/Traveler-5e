@@ -107,14 +107,14 @@ public class AbilityScores
     }
 }
 
-
+/*
 [Serializable]
 public class ScoreNotFoundException : Exception
 {
 
     public ScoreNotFoundException(string danger)
-        :base(danger)
+        : base(danger)
     {
 
     }
-}
+}*/

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Skills : MonoBehaviour
 {
 
-    public List<Skill> skills;
+    private List<Skill> skills;
 
     public Skills()
     {
