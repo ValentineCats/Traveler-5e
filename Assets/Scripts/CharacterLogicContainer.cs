@@ -195,9 +195,13 @@ public class CharacterLogicContainer
         throw new SkillNotFoundException("Error: Unable to find skill with name " + name);
     }
 
-    public void RandomHomeland()
+    public string RandomHomeland()
     {
-
+        int end = this.homelands.Count;
+        Random r = new Random();
+        int i = r.Next(0, this.homelands.Count-1);
+        skills[i].AddRanks(1);
+        return skills[i].GetName();
     }
 
     public string GetScoresAsString()
